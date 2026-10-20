@@ -181,7 +181,11 @@ export class NgxUplotComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.options = this.defOptions;
         this.uplot = new uPlot(this.defOptions, this.sampleData, this.graph.nativeElement);
+        if (this.options.axes && this.options.axes[0].label && this.options.axes[0].label === "Time") {
+			this.rawData = false;
+		}
     }
+   
 
     ngOnDestroy() {
         try {
@@ -212,6 +216,9 @@ export class NgxUplotComponent implements OnInit, OnDestroy {
         if (!Utils.isNullOrUndefined(options?.rawData)) {
             this.rawData = options.rawData;
         }
+        if (options?.axes && options?.axes[0]?.label && options?.axes[0]?.label === "Time") {
+			this.rawData = false;
+		}
         if (options) {
             this.options = options;
             if (!options.id) {
@@ -222,6 +229,7 @@ export class NgxUplotComponent implements OnInit, OnDestroy {
                 this.data = [this.xSample];
             }
         }
+        
         let opt = this.options || this.defOptions;
         const isStaticChart = !!this.options?.staticChart;
         opt.cursor = {
