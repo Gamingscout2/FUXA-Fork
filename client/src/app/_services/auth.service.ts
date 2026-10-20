@@ -284,7 +284,11 @@ export class AuthService {
 		}
 		const contextPermission = settings.userRole ? context.permissionRoles : context.permission;
 		if (settings.userRole) {
-			if (userPermission && !contextPermission) {
+			//if (userPermission && !contextPermission) {
+			// Role users may have no Groups bitmask. Honour the caller's
+			// default before reading permissions stripped by project filtering.
+			// https://github.com/frangoteam/FUXA/pull/2620/changes/66ee59292071df4c7dee1bf8058c970c3e7d51b4
+			if (!contextPermission) {
 				return { show: forceUndefined, enabled: forceUndefined };
 			}
 		} else {
